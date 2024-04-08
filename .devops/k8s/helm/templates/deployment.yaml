@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $.Values.name }}
+  labels:
+    {{- range $key, $value := $.Values.labels }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+  annotations:
+    {{- range $k, $v := $.Values.annotations }}
+    {{ $k }}: {{ $v | squote }}
+    {{- end }}
+spec:
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: {{ $.Values.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ $.Values.name }}
+        {{- range $k, $v := $.Values.labels }}
+        {{ $k }}: {{ $v }}
+        {{- end }}
+    spec:
+      containers:
+      - image: "{{ $.Values.container.image.name }}:{{ $.Values.container.image.tag }}"
+        name: {{ $.Values.name }}
+        ports:
+          {{- range $port := $.Values.container.ports }}
+          - name: {{ $port.name }}
+            containerPort: {{ $port.port }}
+          {{- end }}
+        resources:
+          {{- with $.Values.container.resources }}
+          requests:
+            memory: {{ .requests.memory | default "256Mi" | quote }}
+            cpu: {{ .requests.cpu | default "256m" | quote }}
+          limits:
+            memory: {{ .limits.memory | default "4096Mi" | quote }}
+            cpu: {{ .limits.cpu | default "4096m" | quote }}
+          {{- end }}
+        env:
+          {{- with $.Values.env }} {{- range $key, $value := . }} {{- if $value }}
+          - name: {{ $key | quote }}
+            {{- if or (eq (typeOf $value) "string") (eq (typeOf $value) "int") (eq (typeOf $value) "int64") (eq (typeOf $value) "float64") (eq (typeOf $value) "bool") }}
+            value: {{ $value | quote }}
+            {{- else if (($value).valueFrom) }} {{- range $k, $v := ($value).valueFrom }}
+            valueFrom:
+              {{ $k }}:
+                {{- if eq $k "secretKeyRef" }}
+                name: {{ $v.name | quote }}
+                key: {{ $v.key | quote }}
+              {{- else if eq $k "fieldRef" }}
+                fieldPath: {{ .fieldPath | quote }}
+              {{- end }}
+            {{- end }} {{- end }}
+          {{- end }} {{- end }} {{- end }}
