@@ -3,7 +3,7 @@ environment: null
 
 container:
   image:
-    name: go-service
+    name: jbc0981/go-service
     tag: latest
   resources:
     requests:
