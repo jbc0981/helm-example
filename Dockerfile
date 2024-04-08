@@ -1,4 +1,4 @@
-FROM public.ecr.aws/docker/library/golang:1.23-alpine AS builder
+FROM public.ecr.aws/docker/library/golang:1.22-alpine AS builder
 
 RUN apk --no-cache add build-base
 RUN mkdir /app
@@ -7,7 +7,7 @@ WORKDIR /app
 # Main build
 RUN go build -o main .
 # Copy artifacts into lightweight container
-FROM public.ecr.aws/docker/library/golang:1.23-alpine
+FROM public.ecr.aws/docker/library/golang:1.22-alpine
 RUN apk --no-cache add openssl
 RUN mkdir /app
 WORKDIR /app
