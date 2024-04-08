@@ -1,0 +1,23 @@
+name: go-service
+environment: null
+
+container:
+  image:
+    name: go-service
+    tag: latest
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 256m
+    limits:
+      memory: 2Gi
+      cpu: 1
+
+service:
+  type: NodePort
+  externalPort: 8080
+  internalPort: 8080      
+  
+env:
+  LOG_LEVEL: "debug"
+  PORT: ":8080"

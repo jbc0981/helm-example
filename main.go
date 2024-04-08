@@ -2,11 +2,15 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
+)
+
+const (
+	defaultPort = "8080"
 )
 
 type Response struct {
@@ -25,19 +29,24 @@ func main() {
 	router := mux.NewRouter()
 	log.Println("creating routes")
 	//specify endpoints
-	router.HandleFunc("/health-check", HealthCheck).Methods("GET")
+	router.HandleFunc("/healthz", HealthCheck).Methods("GET")
 	router.HandleFunc("/persons", Persons).Methods("GET")
 	http.Handle("/", router)
 
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = ":8080"
+	}
 	//start and listen to requests
-	http.ListenAndServe(":8080", router)
+	http.ListenAndServe(port, router)
 
 }
 
 func HealthCheck(w http.ResponseWriter, r *http.Request) {
 	log.Println("entering health check end point")
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	fmt.Fprintf(w, "API is up and running")
+	json.NewEncoder(w).Encode(map[string]bool{"ok": true})
 }
 
 func Persons(w http.ResponseWriter, r *http.Request) {

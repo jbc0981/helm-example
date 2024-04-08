@@ -1,0 +1,41 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, build with `go test -c`
+*.test
+mocks/
+
+# VS Code
+.vscode
+__debug_bin
+
+# DS_Store
+.DS_Store
+
+# Executables
+bin
+main
+
+# local stuff
+.env.docker
+
+# docs
+swagger.json
+
+# dependencies
+/node_modules
+package-lock.json
+
+# Cypress
+cypress.env.json
+/cypress/videos
+/cypress/screenshots
+/cypress/downloads
+
+# Go
+go.work
+go.work.sum
