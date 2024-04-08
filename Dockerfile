@@ -1,4 +1,4 @@
-FROM public.ecr.aws/docker/library/golang:1.19-alpine AS builder
+FROM public.ecr.aws/docker/library/golang:1.22-alpine AS builder
 
 RUN apk --no-cache add build-base
 RUN mkdir /app
