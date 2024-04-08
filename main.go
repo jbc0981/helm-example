@@ -62,18 +62,18 @@ func prepareResponse() []Person {
 
 	var person Person
 	person.Id = 1
-	person.FirstName = "Issac"
-	person.LastName = "N"
+	person.FirstName = "Justin"
+	person.LastName = "C"
 	persons = append(persons, person)
 
 	person.Id = 2
-	person.FirstName = "Albert"
-	person.LastName = "E"
+	person.FirstName = "Test"
+	person.LastName = "Person"
 	persons = append(persons, person)
 
 	person.Id = 3
-	person.FirstName = "Thomas"
-	person.LastName = "E"
+	person.FirstName = "Testing"
+	person.LastName = "Person"
 	persons = append(persons, person)
 	return persons
 }
